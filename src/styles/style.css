@@ -1,0 +1,44 @@
+/* prettier-ignore */
+
+:root {
+  --base-font-color: #0d0c22;
+  --font-gray: #6e6d7a;
+  --bg-gray: #21262e;
+  --light-gray: #F3F4F6;
+  --base-blue: #312E81;
+  --light-pink: #FCE7F3;
+  --base-pink: #EC4899;
+}
+
+#app {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 20px 0;
+  border: 1px solid #ccc;
+}
+
+.header {
+  padding: 0 20px;
+}
+.header__logo {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--base-font-color);
+}
+.header__tab {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1rem;
+  margin-top: 30px;
+}
+.header__tab__button {
+  padding: 1rem;
+  border-radius: 5rem;
+  font-size: 1rem;
+  color: var(--base-font-color);
+}
+.header__tab__button--active {
+  color: var(--base-pink);
+  background-color: var(--light-pink);
+}
