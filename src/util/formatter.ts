@@ -42,7 +42,7 @@ function sortStr(data: IUser[]) {
 /**
  *
  * @param data - formatData 함수로 가공된 github 데이터
- * @description 한글 - 영어 이름순으로 유저 정렬
+ * @description 초성 & 알파벳.. 그룹으로 분리한 유저 데이터
  */
 function sortUser(data: IUser[]) {
   const koreanRegx = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
