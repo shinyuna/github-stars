@@ -44,8 +44,9 @@ export default class User extends Component {
     this.$target.addEventListener('click', (e: MouseEvent) => {
       const target: HTMLElement = <HTMLElement>e.target;
       if (target.tagName === 'BUTTON') {
-        const user: IUser = userList.find((user: IUser) => user.id === +target.parentElement?.id);
-        !user.isStar ? insertStar(user) : deleteStar(user);
+        const id: string = <string>target.parentElement?.id;
+        const user: IUser = userList.find((user: IUser) => user.id === +id);
+        return !user.isStar ? insertStar(user) : deleteStar(user);
       }
     });
   }
