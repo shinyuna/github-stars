@@ -1,8 +1,10 @@
-function getItem(key: string) {
-  return localStorage.getItem(key);
+import { IUser } from '../interfaces';
+
+function getItem(key: string): IUser[] | null {
+  return JSON.parse(localStorage.getItem(key) || '[]');
 }
 function setItem(key: string, value: any) {
-  localStorage.setItem(key, value);
+  localStorage.setItem(key, JSON.stringify(value));
 }
 
 export { getItem, setItem };
