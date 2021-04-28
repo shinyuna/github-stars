@@ -1,7 +1,8 @@
 import { API } from './api';
 import { IPrams, IUser } from './interfaces';
-import { getItem } from './util/storage';
+import { getItem, setItem } from './util/storage';
 import { checkIsStar } from './util/formatter';
+import { STAR_LIST } from './util/constants';
 
 import Component from './components/Core';
 import Header from './components/Header';
@@ -12,50 +13,7 @@ export default class App extends Component {
   setup() {
     this.$state = {
       users: [],
-      stars: getItem('starts') || [
-        {
-          id: 19729134,
-          profile_image: 'https://avatars.githubusercontent.com/u/1410106?v=4',
-          name: 'shinyuna',
-          isStar: true,
-        },
-        {
-          id: 19729117,
-          profile_image: 'https://avatars.githubusercontent.com/u/1410106?v=4',
-          name: '깡junho',
-          isStar: true,
-        },
-        {
-          id: 19729117,
-          profile_image: 'https://avatars.githubusercontent.com/u/1410106?v=4',
-          name: '신유나',
-          isStar: true,
-        },
-        {
-          id: 19729117,
-          profile_image: 'https://avatars.githubusercontent.com/u/1410106?v=4',
-          name: '김용현',
-          isStar: true,
-        },
-        {
-          id: 19729117,
-          profile_image: 'https://avatars.githubusercontent.com/u/1410106?v=4',
-          name: '박현정',
-          isStar: true,
-        },
-        {
-          id: 19729117,
-          profile_image: 'https://avatars.githubusercontent.com/u/1410106?v=4',
-          name: '신정원',
-          isStar: true,
-        },
-        {
-          id: 19729117,
-          profile_image: 'https://avatars.githubusercontent.com/u/1410106?v=4',
-          name: 'apple',
-          isStar: true,
-        },
-      ],
+      stars: getItem(STAR_LIST),
       isSelected: 'github',
       isLoading: false,
     };
@@ -71,7 +29,7 @@ export default class App extends Component {
     `;
   }
   mounted() {
-    const { $state, selectItem, searchGithubUser, searchStarUser } = this;
+    const { $state, selectItem, searchGithubUser, searchStarUser, insertStar, deleteStar } = this;
     const $header = this.$target.querySelector('[data-component="item-header"]');
     const $search = this.$target.querySelector('[data-component="item-search"]');
     const $result = this.$target.querySelector('[data-component="item-result"]');
@@ -90,6 +48,8 @@ export default class App extends Component {
       type: $state.isSelected,
       users: $state.users,
       stars: $state.stars,
+      insertStar: insertStar.bind(this),
+      deleteStar: deleteStar.bind(this),
     });
   }
 
@@ -99,20 +59,33 @@ export default class App extends Component {
 
   async searchGithubUser({ q, page = 1, per_page = 100 }: IPrams) {
     try {
+      this.setState({ isLoading: true });
       const { data } = await API.getGithubUser({
         q,
         page,
         per_page,
       });
       const starts = checkIsStar(data.items, this.$state.stars);
-      this.setState({ users: starts });
+      this.setState({ users: starts, isLoading: false });
     } catch (error) {
       console.error('🚨 error:', error);
     }
   }
   searchStarUser(user: string) {
     const regx = new RegExp(user);
-    const search = this.$state.stars.filter((star: IUser) => regx.test(star.name));
+    const starList = getItem(STAR_LIST);
+    const search = starList?.filter((star: IUser) => regx.test(star.name));
     this.setState({ stars: search });
+  }
+  insertStar(addUser: IUser) {
+    addUser.isStar = true;
+    this.setState({ stars: [...this.$state.stars, addUser] });
+    setItem(STAR_LIST, this.$state.stars);
+  }
+  deleteStar(deleteUser: IUser) {
+    deleteUser.isStar = false;
+    const starList = this.$state.stars.filter((user: IUser) => user.id !== deleteUser.id);
+    this.setState({ stars: starList });
+    setItem(STAR_LIST, this.$state.stars);
   }
 }

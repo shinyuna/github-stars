@@ -7,10 +7,11 @@ export default class User extends Component {
   template() {
     const { type, users, stars } = this.$props;
     const { keys, group } = type === 'github' ? sortUser(users) : sortUser(stars);
+    const message = type === 'github' ? 'No people. Please search :)' : 'No favorite people. Please add it :)';
 
     return `${
       keys.length === 0
-        ? `<p class="text-message">${'User not found :('}</p>`
+        ? `<p class="text-message">${message}</p>`
         : keys
             .map(
               (key) => `
@@ -20,7 +21,7 @@ export default class User extends Component {
                 .map(
                   (user: IUser) =>
                     `
-                  <div class="user">
+                  <div class="user" id="${user.id}">
                     <div class="user__profile">
                       <img src="${user.profile_image}" alt="${user.name}"/>
                     </div>
@@ -33,5 +34,18 @@ export default class User extends Component {
             )
             .join('')
     }`;
+  }
+
+  setEvent() {
+    const { type, users, stars, insertStar, deleteStar } = this.$props;
+    const userList = type === 'github' ? users : stars;
+
+    this.$target.addEventListener('click', (e: MouseEvent) => {
+      const target: HTMLElement = <HTMLElement>e.target;
+      if (target.tagName === 'BUTTON') {
+        const user: IUser = userList.find((user: IUser) => user.id === +target.parentElement?.id);
+        !user.isStar ? insertStar(user) : deleteStar(user);
+      }
+    });
   }
 }
