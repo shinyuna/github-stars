@@ -14,6 +14,10 @@ export default class App extends Component {
     this.$state = {
       users: [],
       stars: getItem(STAR_LIST),
+      searchTerm: {
+        github: '',
+        stars: '',
+      },
       isSelected: 'github',
       isLoading: false,
     };
@@ -39,6 +43,7 @@ export default class App extends Component {
     });
     new Search(<HTMLElement>$search, {
       type: $state.isSelected,
+      searchTerm: $state.searchTerm,
       searchGithubUser: searchGithubUser.bind(this),
       searchStarUser: searchStarUser.bind(this),
     });
@@ -65,16 +70,16 @@ export default class App extends Component {
         per_page,
       });
       const starts = checkIsStar(data.items, this.$state.stars);
-      this.setState({ users: starts, isLoading: false });
+      this.setState({ users: starts, searchTerm: { ...this.$state.searchTerm, github: q }, isLoading: false });
     } catch (error) {
       console.error('🚨 error:', error);
     }
   }
-  searchStarUser(user: string) {
-    const regx = new RegExp(user);
+  searchStarUser(userName: string) {
+    const regx = new RegExp(userName);
     const starList = getItem(STAR_LIST);
     const search = starList?.filter((star: IUser) => regx.test(star.name));
-    this.setState({ stars: search });
+    this.setState({ stars: search, searchTerm: { ...this.$state.searchTerm, stars: userName } });
   }
   insertStar(addUser: IUser) {
     addUser.isStar = true;

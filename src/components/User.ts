@@ -9,7 +9,7 @@ export default class User extends Component {
     const { keys, group } = type === 'github' ? sortUser(users) : sortUser(stars);
     const message = type === 'github' ? 'No people. Please search :)' : 'No favorite people. Please add it :)';
 
-    if (isLoading) return `<p class="text-message">Getting data...🏃‍♀️</p>`;
+    if (isLoading) return `<p class="text-message">Searching for users...🏃‍♀️</p>`;
     return `${
       keys.length === 0
         ? `<p class="text-message">${message}</p>`
