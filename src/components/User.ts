@@ -5,10 +5,11 @@ import Component from './Core';
 
 export default class User extends Component {
   template() {
-    const { type, users, stars } = this.$props;
+    const { type, users, stars, isLoading } = this.$props;
     const { keys, group } = type === 'github' ? sortUser(users) : sortUser(stars);
     const message = type === 'github' ? 'No people. Please search :)' : 'No favorite people. Please add it :)';
 
+    if (isLoading) return `<p class="text-message">Getting data...🏃‍♀️</p>`;
     return `${
       keys.length === 0
         ? `<p class="text-message">${message}</p>`

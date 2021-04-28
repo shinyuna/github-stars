@@ -24,7 +24,6 @@ export default class App extends Component {
       <main>
         <section data-component="item-search" class="search"></section>
         <section data-component="item-result" class="users"></section>
-        <div data-component="item-loading"></div>
       </main>
     `;
   }
@@ -33,7 +32,6 @@ export default class App extends Component {
     const $header = this.$target.querySelector('[data-component="item-header"]');
     const $search = this.$target.querySelector('[data-component="item-search"]');
     const $result = this.$target.querySelector('[data-component="item-result"]');
-    const $loading = this.$target.querySelector('[data-component="item-loading"]');
 
     new Header(<HTMLElement>$header, {
       isSelected: $state.isSelected,
@@ -48,6 +46,7 @@ export default class App extends Component {
       type: $state.isSelected,
       users: $state.users,
       stars: $state.stars,
+      isLoading: $state.isLoading,
       insertStar: insertStar.bind(this),
       deleteStar: deleteStar.bind(this),
     });
