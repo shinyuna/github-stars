@@ -20,10 +20,11 @@ export default class Search extends Component {
 
     this.$target.querySelector('.search__form')?.addEventListener('submit', (e) => {
       e.preventDefault();
-
       if (type === 'github' && !input.value) return alert('Enter user name!');
 
-      type === 'github' ? searchGithubUser({ q: input.value }) : searchStarUser(input.value);
+      const keyword = input.value.trim();
+
+      type === 'github' ? searchGithubUser({ q: keyword }) : searchStarUser(keyword);
     });
   }
 }
