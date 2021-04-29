@@ -1,0 +1,171 @@
+/* prettier-ignore */
+:root {
+  --base-font-color: #0d0c22;
+  --font-gray: #6e6d7a;
+  --light-gray: #F3F4F6;
+  --light-pink: #FCE7F3;
+  --base-pink: #EC4899;
+}
+
+#app {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+#app > * {
+  color: var(--base-font-color);
+}
+
+/* Header */
+.header__logo {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.header__tab {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1rem;
+  margin-top: 30px;
+}
+.header__tab__button {
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  color: var(--base-font-color);
+  background-color: var(--light-gray);
+  text-transform: capitalize;
+}
+.header__tab__button--active {
+  color: var(--base-pink);
+  background-color: var(--light-pink);
+}
+
+/* Search */
+.search {
+  margin-top: 1rem;
+}
+.search__form {
+  width: 100%;
+  display: flex;
+  border-radius: 10px;
+  background-color: var(--light-gray);
+  padding: 1rem;
+}
+.search__form__btn {
+  padding-right: 1rem;
+}
+.search__form__input {
+  width: 100%;
+  color: var(--font-gray);
+  border: none;
+  background: none;
+}
+
+/* Users */
+.users {
+  margin-top: 30px;
+}
+.group__title {
+  padding: 10px;
+  font-weight: 600;
+}
+.user {
+  display: grid;
+  grid-template-columns: 0.5fr 1fr 0.5fr;
+  align-items: center;
+  text-align: center;
+  grid-gap: 5px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 1rem;
+  box-shadow: 0px 8px 20px rgb(0 0 0 / 6%);
+}
+.user__profile {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 100%;
+  overflow: hidden;
+  background-color: var(--light-gray);
+}
+.user__profile > img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.user__starbtn {
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+.text-message {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+/* prettier-ignore */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+  box-sizing: border-box;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+button,
+input {
+  border: none;
+  background: none;
+  outline: none;
+}
+
