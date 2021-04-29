@@ -1,5 +1,14 @@
 import { IUser } from '../interfaces';
 
+interface IRegx {
+  [key: string]: RegExp;
+}
+const regx: IRegx = {
+  kr: /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/,
+  en: /[A-Za-z]/,
+  uq: /[0-9~!@#$%^&*()_+|<>?:{}]/,
+};
+
 /**
  *
  * @param data - github api에서 받은 data
@@ -31,9 +40,9 @@ function checkIsStar(data: IUser[], stars: IUser[]) {
 }
 
 /**
- * 특수문자 숫자 쪽 정렬해줘야함.. 지금은 숫자 - 한글 - 영어
+ *
  * @param data - formatData 함수로 가공된 github 데이터
- * @description 한글 - 영어 - 특수문자 - 숫자 순으로 정렬
+ * @description 한글 - 영어 순으로 정렬
  */
 function sortStr(data: IUser[]) {
   return data.sort((a: IUser, b: IUser) => a.name.localeCompare(b.name, 'ko-KR'));
@@ -41,15 +50,27 @@ function sortStr(data: IUser[]) {
 
 /**
  *
+ * @param array 문자열, 숫자 등이 들어있는 배열
+ * @returns 문자열 - 숫자 순으로 배열 리턴
+ */
+function sortStringNumber(array: any[]) {
+  let str: string[] = [];
+  let uniq: number[] = [];
+  array.forEach((item) => {
+    regx['uq'].test(item) ? uniq.push(item) : str.push(item);
+  });
+  return [...str, ...uniq];
+}
+
+/**
+ *
  * @param data - formatData 함수로 가공된 github 데이터
  * @description 초성 & 알파벳.. 그룹으로 분리한 유저 데이터
  */
-function sortUser(data: IUser[]) {
-  const koreanRegx = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
-
+function groypByFirst(data: IUser[]) {
   const group = sortStr(data).reduce((acc, user) => {
     let first;
-    koreanRegx.test(user.name) ? (first = getKorean(user.name)) : (first = user.name.charAt(0).toUpperCase());
+    regx['kr'].test(user.name) ? (first = getKorean(user.name)) : (first = user.name.charAt(0).toUpperCase());
     if (!acc[first]) {
       acc[first] = [];
     }
@@ -57,7 +78,7 @@ function sortUser(data: IUser[]) {
     return acc;
   }, <Record<string, IUser[]>>{});
 
-  const keys = Object.keys(group);
+  const keys = sortStringNumber(Object.keys(group));
 
   return { keys, group };
 }
@@ -65,7 +86,7 @@ function sortUser(data: IUser[]) {
 /**
  *
  * @param kor - korean name
- * @description 이름 첫 글자의 초성 리턴
+ * @description 문자열의 첫 글자의 초성 리턴
  */
 function getKorean(kor: string) {
   const f = [
@@ -99,4 +120,4 @@ function getKorean(kor: string) {
   return f[fn];
 }
 
-export { formatData, checkIsStar, sortUser };
+export { formatData, checkIsStar, groypByFirst };

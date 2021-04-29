@@ -1,12 +1,12 @@
 import { IUser } from '../interfaces';
-import { sortUser } from '../util/formatter';
+import { groypByFirst } from '../util/formatter';
 
 import Component from './Core';
 
 export default class User extends Component {
   template() {
     const { type, users, stars, isLoading } = this.$props;
-    const { keys, group } = type === 'github' ? sortUser(users) : sortUser(stars);
+    const { keys, group } = type === 'github' ? groypByFirst(users) : groypByFirst(stars);
     const message = type === 'github' ? 'No people. Please search :)' : 'No favorite people. Please add it :)';
 
     if (isLoading) return `<p class="text-message">Searching for users...🏃‍♀️</p>`;
@@ -38,7 +38,7 @@ export default class User extends Component {
   }
 
   setEvent() {
-    const { type, users, stars, insertStar, deleteStar } = this.$props;
+    const { type, users, stars, controlStar } = this.$props;
     const userList = type === 'github' ? users : stars;
 
     this.$target.addEventListener('click', (e: MouseEvent) => {
@@ -46,7 +46,7 @@ export default class User extends Component {
       if (target.tagName === 'BUTTON') {
         const id: string = <string>target.parentElement?.id;
         const user: IUser = userList.find((user: IUser) => user.id === +id);
-        return !user.isStar ? insertStar(user) : deleteStar(user);
+        return !user.isStar ? controlStar(user, true) : controlStar(user, false);
       }
     });
   }
