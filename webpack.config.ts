@@ -58,7 +58,8 @@ const config: Configuration = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/index.html',
+      template: './src/public/index.html',
+      favicon: './src/public/favicon/favicon.ico',
       filename: './index.html',
       templateParameters: {
         env: process.env.NODE_ENV === 'development' ? '(개발용)' : '',
