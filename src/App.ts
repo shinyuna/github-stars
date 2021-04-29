@@ -32,7 +32,7 @@ export default class App extends Component {
     `;
   }
   mounted() {
-    const { $state, selectItem, searchGithubUser, searchStarUser, insertStar, deleteStar } = this;
+    const { $state, selectItem, searchGithubUser, searchStarUser, controlStar } = this;
     const $header = this.$target.querySelector('[data-component="item-header"]');
     const $search = this.$target.querySelector('[data-component="item-search"]');
     const $result = this.$target.querySelector('[data-component="item-result"]');
@@ -52,8 +52,7 @@ export default class App extends Component {
       users: $state.users,
       stars: $state.stars,
       isLoading: $state.isLoading,
-      insertStar: insertStar.bind(this),
-      deleteStar: deleteStar.bind(this),
+      controlStar: controlStar.bind(this),
     });
   }
 
@@ -63,33 +62,34 @@ export default class App extends Component {
 
   async searchGithubUser({ q, page = 1, per_page = 100 }: IPrams) {
     try {
-      this.setState({ isLoading: true });
+      this.setState({ isLoading: true, searchTerm: { ...this.$state.searchTerm, github: q } });
       const { data } = await API.getGithubUser({
         q,
         page,
         per_page,
       });
-      const starts = checkIsStar(data.items, this.$state.stars);
-      this.setState({ users: starts, searchTerm: { ...this.$state.searchTerm, github: q }, isLoading: false });
+      const starList = getItem(STAR_LIST) || this.$state.stars;
+      const starts = checkIsStar(data.items, starList);
+      this.setState({ users: starts, isLoading: false });
     } catch (error) {
       console.error('🚨 error:', error);
     }
   }
   searchStarUser(userName: string) {
-    const regx = new RegExp(userName);
+    const regx = new RegExp(userName, 'i');
     const starList = getItem(STAR_LIST);
     const search = starList?.filter((star: IUser) => regx.test(star.name));
     this.setState({ stars: search, searchTerm: { ...this.$state.searchTerm, stars: userName } });
   }
-  insertStar(addUser: IUser) {
-    addUser.isStar = true;
-    this.setState({ stars: [...this.$state.stars, addUser] });
-    setItem(STAR_LIST, this.$state.stars);
-  }
-  deleteStar(deleteUser: IUser) {
-    deleteUser.isStar = false;
-    const starList = this.$state.stars.filter((user: IUser) => user.id !== deleteUser.id);
-    this.setState({ stars: starList });
+  controlStar(user: IUser, check: boolean) {
+    user.isStar = check;
+    let starList = getItem(STAR_LIST) || this.$state.stars;
+    if (check) {
+      this.setState({ stars: [...starList, user], searchTerm: { ...this.$state.searchTerm, stars: '' } });
+    } else {
+      starList = starList.filter((a: IUser) => a.id !== user.id);
+      this.setState({ stars: starList, searchTerm: { ...this.$state.searchTerm, stars: '' } });
+    }
     setItem(STAR_LIST, this.$state.stars);
   }
 }
