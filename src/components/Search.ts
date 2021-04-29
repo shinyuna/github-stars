@@ -2,14 +2,14 @@ import Component from './Core';
 
 export default class Search extends Component {
   template() {
-    const { type, searchTerm } = this.$props;
+    const { type, searchTerm, isLoading } = this.$props;
 
     return `
       <form class="search__form">
         <button type="submit" class="search__form__btn">🔎</button>
         <input type="text" class="search__form__input" value="${searchTerm[type]}" placeholder="${
       type === 'github' ? 'Search Github user name' : 'Search Stars user name'
-    }" autofocus/>
+    }" autofocus ${isLoading ? 'readonly' : ''}/>
       </form>
     `;
   }

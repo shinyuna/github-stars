@@ -44,6 +44,7 @@ export default class App extends Component {
     new Search(<HTMLElement>$search, {
       type: $state.isSelected,
       searchTerm: $state.searchTerm,
+      isLoading: $state.isLoading,
       searchGithubUser: searchGithubUser.bind(this),
       searchStarUser: searchStarUser.bind(this),
     });
