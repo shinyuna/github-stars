@@ -1,4 +1,4 @@
-import { IUser } from '../interfaces';
+import { User } from '../interfaces';
 
 interface IRegx {
   [key: string]: RegExp;
@@ -29,7 +29,7 @@ function formatData(data: any[]) {
  * @param stars - 즐겨찾기에 추가된 유저 리스트
  * @description github에서 검색한 유저 중 즐겨찾기 된 유저를 찾고 isStar 값 변경
  */
-function checkIsStar(data: IUser[], stars: IUser[]) {
+function checkIsStar(data: User[], stars: User[]) {
   return data.map((item) => {
     const isStart = stars.find((start) => start.id === item.id);
     if (isStart) {
@@ -44,8 +44,8 @@ function checkIsStar(data: IUser[], stars: IUser[]) {
  * @param data - formatData 함수로 가공된 github 데이터
  * @description 한글 - 영어 순으로 정렬
  */
-function sortStr(data: IUser[]) {
-  return data.sort((a: IUser, b: IUser) => a.name.localeCompare(b.name, 'ko-KR'));
+function sortStr(data: User[]) {
+  return data.sort((a: User, b: User) => a.name.localeCompare(b.name, 'ko-KR'));
 }
 
 /**
@@ -54,8 +54,8 @@ function sortStr(data: IUser[]) {
  * @returns 문자열 - 숫자 순으로 배열 리턴
  */
 function sortStringNumber(array: any[]) {
-  let str: string[] = [];
-  let uniq: number[] = [];
+  const str: string[] = [];
+  const uniq: number[] = [];
   array.forEach((item) => {
     regx['uq'].test(item) ? uniq.push(item) : str.push(item);
   });
@@ -67,7 +67,7 @@ function sortStringNumber(array: any[]) {
  * @param data - formatData 함수로 가공된 github 데이터
  * @description 초성 & 알파벳.. 그룹으로 분리한 유저 데이터
  */
-function groypByFirst(data: IUser[]) {
+function groypByFirst(data: User[]) {
   const group = sortStr(data).reduce((acc, user) => {
     let first;
     regx['kr'].test(user.name) ? (first = getKorean(user.name)) : (first = user.name.charAt(0).toUpperCase());
@@ -76,7 +76,7 @@ function groypByFirst(data: IUser[]) {
     }
     acc[first].push(user);
     return acc;
-  }, <Record<string, IUser[]>>{});
+  }, <Record<string, User[]>>{});
 
   const keys = sortStringNumber(Object.keys(group));
 
@@ -110,12 +110,12 @@ function getKorean(kor: string) {
     'ㅍ',
     'ㅎ',
   ];
-  const ga: number = 44032;
+  const ga = 44032;
   let uni: number = kor.charCodeAt(0);
 
   uni = uni - ga;
 
-  let fn = Math.floor(uni / 588);
+  const fn = Math.floor(uni / 588);
 
   return f[fn];
 }

@@ -1,9 +1,9 @@
-import { IUser } from '../interfaces';
+import { User } from '../interfaces';
 import { groypByFirst } from '../util/formatter';
 
 import Component from './Core';
 
-export default class User extends Component {
+export default class UserComponent extends Component {
   template() {
     const { type, users, stars, isLoading } = this.$props;
     const { keys, group } = type === 'github' ? groypByFirst(users) : groypByFirst(stars);
@@ -20,7 +20,7 @@ export default class User extends Component {
               <p class="group__title">${key}</p>
               ${group[key]
                 .map(
-                  (user: IUser) =>
+                  (user: User) =>
                     `
                   <div class="user" id="${user.id}">
                     <div class="user__profile">
@@ -45,7 +45,7 @@ export default class User extends Component {
       const target: HTMLElement = <HTMLElement>e.target;
       if (target.tagName === 'BUTTON') {
         const id: string = <string>target.parentElement?.id;
-        const user: IUser = userList.find((user: IUser) => user.id === +id);
+        const user: User = userList.find((user: User) => user.id === +id);
         return !user.isStar ? controlStar(user, true) : controlStar(user, false);
       }
     });

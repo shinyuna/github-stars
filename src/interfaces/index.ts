@@ -1,14 +1,14 @@
-interface IPrams {
+interface SearchParams {
   q: string;
   page: number;
   per_page: number;
 }
 
-interface IUser {
+interface User {
   id: number;
   profile_image: string;
   name: string;
   isStar: boolean;
 }
 
-export { IPrams, IUser };
+export { SearchParams, User };

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { IPrams } from '../interfaces';
+import { SearchParams } from '../interfaces';
 import { formatData } from '../util/formatter';
 
 const TARGET_URL = 'https://api.github.com';
@@ -19,6 +19,6 @@ github.interceptors.response.use(
   (error) => console.error(error),
 );
 
-API.getGithubUser = (params: IPrams) => github.get('/search/users', { params: params });
+API.getGithubUser = (params: SearchParams) => github.get('/search/users', { params: params });
 
 export { API };

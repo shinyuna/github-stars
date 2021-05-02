@@ -1,9 +1,9 @@
-import { IUser } from '../interfaces';
+import { User } from '../interfaces';
 
-function getItem(key: string): IUser[] | null {
+function getItem(key: string): User[] {
   return JSON.parse(localStorage.getItem(key) || '[]');
 }
-function setItem(key: string, value: any) {
+function setItem(key: string, value: string) {
   localStorage.setItem(key, JSON.stringify(value));
 }
 

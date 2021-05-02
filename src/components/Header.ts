@@ -1,6 +1,6 @@
 import Component from './Core';
 
-export default class Header extends Component {
+export default class HeaderComponent extends Component {
   template() {
     const tabs = ['github', 'stars'];
     const { isSelected } = this.$props;

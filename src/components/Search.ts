@@ -1,6 +1,6 @@
 import Component from './Core';
 
-export default class Search extends Component {
+export default class SearchComponent extends Component {
   template() {
     const { type, searchTerm, isLoading } = this.$props;
 
@@ -20,7 +20,10 @@ export default class Search extends Component {
 
     this.$target.querySelector('.search__form')?.addEventListener('submit', (e) => {
       e.preventDefault();
-      if (type === 'github' && !input.value) return alert('Enter user name!');
+
+      if (type === 'github' && !input.value) {
+        return alert('Enter user name!');
+      }
 
       const keyword = input.value.trim();
 
