@@ -1,22 +1,16 @@
-import path from 'path';
-import webpack, { Configuration as WebpackConfiguration } from 'webpack';
-import { Configuration as WebpackDevServerConfiguration } from 'webpack-dev-server';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+/* eslint-disable @typescript-eslint/no-var-requires */
 
-interface Configuration extends WebpackConfiguration {
-  devServer?: WebpackDevServerConfiguration;
-}
+const webpack = require('webpack');
+const path = require('path');
+
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
-const config: Configuration = {
+module.exports = {
   name: 'github-stars',
-  mode: isDevelopment ? 'development' : 'production',
-  devtool: isDevelopment ? 'hidden-source-map' : 'eval',
-  resolve: {
-    extensions: ['.js', '.ts', '.json'],
-  },
   entry: {
     app: './src/main.ts',
   },
@@ -24,12 +18,8 @@ const config: Configuration = {
     filename: '[name].bundle.js',
     path: path.join(__dirname, 'dist'),
   },
-  devServer: {
-    contentBase: path.join(__dirname, 'dist'),
-    publicPath: '/',
-    port: 3000,
-    hot: true,
-    open: true,
+  resolve: {
+    extensions: ['.js', '.ts', '.json'],
   },
   module: {
     rules: [
@@ -42,7 +32,6 @@ const config: Configuration = {
               '@babel/preset-env',
               {
                 targets: { browsers: ['last 2 chrome versions'] },
-                debug: isDevelopment,
               },
             ],
             '@babel/preset-typescript',
@@ -57,6 +46,11 @@ const config: Configuration = {
     ],
   },
   plugins: [
+    new webpack.EnvironmentPlugin({ NODE_ENV: isDevelopment ? 'development' : 'production' }),
+    new MiniCssExtractPlugin({ filename: '[name].css', chunkFilename: '[id].css' }),
+    new CleanWebpackPlugin({
+      cleanAfterEveryBuildPatterns: ['dist'],
+    }),
     new HtmlWebpackPlugin({
       template: './src/public/index.html',
       favicon: './src/public/favicon/favicon.ico',
@@ -72,13 +66,5 @@ const config: Configuration = {
             }
           : false,
     }),
-    new webpack.EnvironmentPlugin({ NODE_ENV: isDevelopment ? 'development' : 'production' }),
-    new MiniCssExtractPlugin({ filename: '[name].css', chunkFilename: '[id].css' }),
   ],
 };
-
-if (isDevelopment && config.plugins) {
-  config.plugins.push(new webpack.HotModuleReplacementPlugin());
-}
-
-export default config;

@@ -5,8 +5,8 @@
   "main": "index.js",
   "homepage": "https://github.com/shinyuna/github-stars/",
   "scripts": {
-    "start": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack serve",
-    "build": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack",
+    "start": "webpack serve --config webpack/config.dev.js",
+    "build": "webpack --config webpack/config.prod.js",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "test": "echo \"Error: no test specified\" && exit 1"
